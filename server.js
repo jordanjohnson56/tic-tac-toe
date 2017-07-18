@@ -43,16 +43,35 @@ function doMove(space) {
 
 function checkBoard() {
   // ROWS
-  if(compareTiles(0, 1, 2)) gameOver(tiles[0]);
-  if(compareTiles(3, 4, 5)) gameOver(tiles[3]);
-  if(compareTiles(6, 7, 8)) gameOver(tiles[6]);
+  if(compareTiles(0, 1, 2)) {
+    gameOver(tiles[0]);
+  } else if(compareTiles(3, 4, 5)) {
+    gameOver(tiles[3]);
+  } else if(compareTiles(6, 7, 8)) {
+    gameOver(tiles[6]);
+  }
   // COLS
-  if(compareTiles(0, 3, 6)) gameOver(tiles[0]);
-  if(compareTiles(1, 4, 7)) gameOver(tiles[1]);
-  if(compareTiles(2, 5, 8)) gameOver(tiles[2]);
+  else if(compareTiles(0, 3, 6)) {
+    gameOver(tiles[0]);
+  } else if(compareTiles(1, 4, 7)) {
+    gameOver(tiles[1]);
+  } else if(compareTiles(2, 5, 8)) {
+    gameOver(tiles[2]);
+  }
   // DIAG
-  if(compareTiles(0, 4, 8)) gameOver(tiles[0]);
-  if(compareTiles(2, 4, 6)) gameOver(tiles[2]);
+  else if(compareTiles(0, 4, 8)) {
+    gameOver(tiles[0]);
+  } else if(compareTiles(2, 4, 6)) {
+    gameOver(tiles[2]);
+  }
+  // TIE
+  else {
+    var tie = true;
+    for(var i = 0; tie && i < tiles.length; i++) {
+      if(tiles[i] == 0) tie = false;
+    }
+    if(tie) gameOver(0);
+  }
 }
 
 function compareTiles(t0, t1, t2) {
@@ -96,6 +115,8 @@ io.sockets.on('connection', function(client) {
     console.log('Client disconnected. IP: '
                 + client.request.connection.remoteAddress);
   });
+  
+  client.emit('board', tiles);
   
   client.on('click', function(space) {
     doMove(space);

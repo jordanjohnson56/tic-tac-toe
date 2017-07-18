@@ -1,0 +1,12 @@
+{
+  "name": "tic-tac-toe",
+  "version": "1.0.0",
+  "description": "Tic Tac Toe over the web with node.js and socket.io.",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.15.3",
+    "socket.io": "^2.0.1"
+  },
+  "author": "Jordan Johnson",
+  "license": "MIT"
+}

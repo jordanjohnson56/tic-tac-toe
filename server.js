@@ -29,11 +29,12 @@ app.get('*', function(req, res) {
 });
 
 var turn = 1;
+var game_over = false;
 var tiles;
 resetGrid();
 
 function doMove(space) {
-  if(tiles[space] == 0) {
+  if(!game_over && tiles[space] == 0) {
     tiles[space] = turn;
     toggleTurn();
     io.emit('board', tiles);
@@ -84,6 +85,7 @@ function compareTiles(t0, t1, t2) {
 }
 
 function gameOver(winner) {
+  game_over = true;
   io.emit('winner', winner);
   setTimeout(resetGrid, 1500);
 }
@@ -104,6 +106,7 @@ function resetGrid() {
     tiles.push(0);
   }
   turn = 1;
+  game_over = false;
   io.emit('board', tiles);
 }
 
@@ -120,5 +123,9 @@ io.sockets.on('connection', function(client) {
   
   client.on('click', function(space) {
     doMove(space);
+  });
+  
+  client.on('touch', function(data) {
+    console.log(data);
   });
 });

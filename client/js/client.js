@@ -95,7 +95,7 @@ $(function() {
     c.stroke();
   }
   
-  // TODO: FILL BOARD SPACES
+  // Fill board with X's and O's.
   function fillBoard() {
     for(var i = 0; i < tiles.length; i++) {
       if(tiles[i] == 1) {
@@ -169,11 +169,28 @@ $(function() {
   }
   
   window.addEventListener('click', onClick);
+  initTouch();
   
   function onClick(e) {
     var dim = cvs.getBoundingClientRect();
     var x = e.clientX - dim.left;
     var y = e.clientY - dim.top;
+    var space = gridSpace(x, y);
+    if(space >= 0) {
+      socket.emit('click', space);
+    }
+  }
+  
+  function initTouch() {
+    cvs.addEventListener('touchstart', touch);
+  }
+  
+  function touch(e) {
+    e.preventDefault();
+    var touches = e.changedTouches;
+    var dim = cvs.getBoundingClientRect();
+    var x = touches[0].pageX - dim.left;
+    var y = touches[0].pageY - dim.top;
     var space = gridSpace(x, y);
     if(space >= 0) {
       socket.emit('click', space);
